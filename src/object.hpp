@@ -17,9 +17,7 @@ class Object{
     struct State{
       // Etat primaire
       glm::dvec3 position;
-      glm::dvec3 momentum;
       glm::dquat orientation;
-      glm::dvec3 angularMomentum;
 
       // Etat secondaire
       glm::dvec3 velocity;
@@ -35,6 +33,10 @@ class Object{
       glm::dmat3 inverseInertiaTensor; //objet inerte inverse = 0
 
       // Recalcule les valeurs secondaire en fonction des valeurs primaire
+#ifdef RK4
+      glm::dvec3 momentum;
+      glm::dvec3 angularMomentum;
+
       void recalculate(){
         velocity = momentum * inverseMass;
         angularVelocity = angularMomentum * inverseInertiaTensor;
@@ -43,6 +45,13 @@ class Object{
         bodyToWorld = glm::translate(glm::dmat4(1.0), position) * glm::mat4_cast(orientation);
         worldToBody = glm::inverse(bodyToWorld);
       }
+#else
+      void recalculate(){
+        orientation = glm::normalize(orientation);
+        bodyToWorld = glm::translate(glm::dmat4(1.0), position) * glm::mat4_cast(orientation);
+        worldToBody = glm::inverse(bodyToWorld);
+      }
+#endif
 
       glm::dvec3 abs_point_velocity(const glm::dvec3 &point){
         return velocity + glm::cross(angularVelocity, point);
@@ -60,9 +69,15 @@ class Object{
     State previousState();
     // Mise a jour de l'état physique de l'objet
     void update(double t, double dt);
+    void integrateForces(double dt);
+    void integrateVelocities(double dt);
     State interpolate(double alpha);
     std::list<glm::dvec3> get_vertices();
     bool collide(Object &other, std::list<Contact> &contact);
+
+    void setPosition(glm::dvec3 pos);
+    void setLinearVelocity(glm::dvec3 vel);
+    void setAngularVelocity(glm::dvec3 vel);
 
     static void forces(const State &state, double t, glm::dvec3 &force, glm::dvec3 &torque);
 

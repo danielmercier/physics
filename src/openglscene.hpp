@@ -9,7 +9,7 @@ int xnew=0, ynew=0, znew=-100;
 int xold=0, yold=0, zold=-100;
 int xx1=0, yy1=0, zz1=0;
 
-Engine engine;
+Engine *engine;
 
 // Etat de la souris
 int MouseState=0;
@@ -75,11 +75,12 @@ GLfloat mat_shininessRED[] ={128.0};
 void keyPressed(unsigned char key, int x, int y)
 {
   if(key == 'p'){
-    engine.run_pause();
+    engine->run_pause();
   }
 }
 
-int call_gl (int argc, char **argv) {
+int call_gl (int argc, char **argv, Engine &e) {
+  engine = &e;
   glutInit(&argc, argv);
 
   /*  Activation des buffers :
@@ -163,7 +164,7 @@ void display(void) {
 
 	SetMaterial(mat_specularYELLOW, mat_ambientYELLOW, mat_diffuseYELLOW, mat_shininessYELLOW);
 
-  engine.update();
+  engine->update();
 
   // Permutation des buffers et mise-à-jour
   glFlush();

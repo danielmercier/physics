@@ -11,12 +11,12 @@ Constraint::Constraint(){
 }
 
 double Constraint::solve(){
-  arma::vec lambda = (- (jacobian * velocity + bias) / (jacobian * invmass * jacobian.t()));
+  arma::vec lambda = arma::solve(jacobian * invmass * jacobian.t(), - (jacobian * velocity + bias));
   return lambda[0];
 }
 
 arma::vec Constraint::apply(double lambda){
-  arma::vec Pc = jacobian.t() * lambda;
-  arma::vec vel = velocity * invmass * Pc;
+  arma::vec Pc =  lambda * jacobian.t();
+  arma::vec vel = velocity + invmass * Pc;
   return vel;
 }

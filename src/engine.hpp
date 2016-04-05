@@ -27,21 +27,6 @@ class Engine{
     static double gettime();
 
   public:
-    Cube obj;
-    CubeRenderer objrenderer;
-
-    Plan obj2;
-    PlanRenderer objrenderer2;
-
-    Plan obj3;
-    PlanRenderer objrenderer3;
-
-    Plan obj4;
-    PlanRenderer objrenderer4;
-
-    Plan obj5;
-    PlanRenderer objrenderer5;
-
     Engine();
     void add(Object &op, ObjectRenderer &ore);
     void update();
