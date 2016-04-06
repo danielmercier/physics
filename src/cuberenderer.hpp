@@ -1,5 +1,7 @@
 #pragma once
 
+#include "GL/glut.h"
+
 #include "objectrenderer.hpp"
 #include "cube.hpp"
 

@@ -7,7 +7,8 @@ SRCWDIR=collisionengine.cpp object.cpp plan.cpp cube.cpp \
 				planshape.cpp cubeshape.cpp \
 				cuberenderer.cpp planrenderer.cpp renderer.cpp \
 				constraint.cpp converter.cpp distanceconstraint.cpp \
-				physicsengine.cpp engine.cpp main.cpp
+				distancepointconstraint.cpp \
+				sequentialsolver.cpp physicsengine.cpp engine.cpp main.cpp
 
 OBJWDIR=$(SRCWDIR:.cpp=.o)
 

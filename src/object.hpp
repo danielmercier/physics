@@ -31,6 +31,7 @@ class Object{
       double inverseMass; // mass infini, inverseMass = 0
       glm::dmat3 inertiaTensor; // objet inerte, inertiatensor = -1
       glm::dmat3 inverseInertiaTensor; //objet inerte inverse = 0
+      glm::dvec3 scaling;
 
       // Recalcule les valeurs secondaire en fonction des valeurs primaire
 #ifdef RK4
@@ -49,6 +50,7 @@ class Object{
       void recalculate(){
         orientation = glm::normalize(orientation);
         bodyToWorld = glm::translate(glm::dmat4(1.0), position) * glm::mat4_cast(orientation);
+        bodyToWorld = glm::scale(bodyToWorld, scaling);
         worldToBody = glm::inverse(bodyToWorld);
       }
 #endif
@@ -65,19 +67,30 @@ class Object{
     /*Constructeur de base*/
     Object();
     ~Object();
-    State * state();
     State previousState();
     // Mise a jour de l'état physique de l'objet
     void update(double t, double dt);
     void integrateForces(double dt);
     void integrateVelocities(double dt);
     State interpolate(double alpha);
-    std::list<glm::dvec3> get_vertices();
+
+    std::list<glm::dvec3> getVertices();
     bool collide(Object &other, std::list<Contact> &contact);
 
     void setPosition(glm::dvec3 pos);
+    void setScaling(glm::dvec3 scaling);
+    void setOrientation(glm::quat orientation);
     void setLinearVelocity(glm::dvec3 vel);
     void setAngularVelocity(glm::dvec3 vel);
+
+    glm::dvec3 getPosition();
+    glm::dvec3 getLinearVelocity();
+    glm::dvec3 getAngularVelocity();
+    State getState();
+
+    glm::dvec3 toWorld(const glm::dvec3 &point, double homogeneous = 1.);
+
+    void recalculate();
 
     static void forces(const State &state, double t, glm::dvec3 &force, glm::dvec3 &torque);
 

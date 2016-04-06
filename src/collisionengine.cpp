@@ -21,8 +21,8 @@ bool CollisionEngine::test_collide(CubeShape *cube, PlanShape *plan, std::list<C
   glm::dvec3 normal = plan->plan->normal;
   glm::dvec3 origin = plan->plan->origin;
 
-  for(glm::dvec3 &vertex : c->get_vertices()){
-    glm::dvec3 v = glm::dvec3(c->state()->bodyToWorld * glm::dvec4(vertex, 1));
+  for(glm::dvec3 &vertex : c->getVertices()){
+    glm::dvec3 v = c->toWorld(vertex, 1);
     v = v - origin;
     double dot = glm::dot(normal, v);
     if(dot <= 0){

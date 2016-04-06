@@ -30,11 +30,7 @@ arma::mat Converter::get_invmass(const Object::State &o1, const Object::State &o
   return invmass;
 }
 
-static arma::mat get_invmass_only(const Object::State &o1, const Object::State &o2){
-
-}
-
-void Converter::get_velocity(arma::vec velocity, glm::dvec3 &v1, glm::dvec3 &a1, glm::dvec3 &v2, glm::dvec3 &a2){
+void Converter::get_velocity(arma::mat velocity, glm::dvec3 &v1, glm::dvec3 &a1, glm::dvec3 &v2, glm::dvec3 &a2){
   v1.x = velocity[0];
   v1.y = velocity[1];
   v1.z = velocity[2];
@@ -50,4 +46,34 @@ void Converter::get_velocity(arma::vec velocity, glm::dvec3 &v1, glm::dvec3 &a1,
   a2.x = velocity[9];
   a2.y = velocity[10];
   a2.z = velocity[11];
+}
+
+arma::vec Converter::get_velocity(const Object::State &o){
+  return
+    { o.velocity.x, o.velocity.y, o.velocity.z,
+      o.angularVelocity.x, o.angularVelocity.y, o.angularVelocity.z };
+}
+
+arma::mat Converter::get_invmass(const Object::State &o){
+  glm::mat3 I = o.inverseInertiaTensor;
+  arma::mat invmass =
+    { { o.inverseMass, 0            , 0            , 0      , 0      , 0       },
+      { 0            , o.inverseMass, 0            , 0      , 0      , 0       },
+      { 0            , 0            , o.inverseMass, 0      , 0      , 0       },
+      { 0            , 0            , 0            , I[0][0], I[0][1], I[0][2] },
+      { 0            , 0            , 0            , I[1][0], I[1][1], I[1][2] },
+      { 0            , 0            , 0            , I[2][0], I[2][1], I[2][2] }
+    };
+
+  return invmass;
+}
+
+void Converter::get_velocity(arma::mat velocity, glm::dvec3 &v, glm::dvec3 &a){
+  v.x = velocity[0];
+  v.y = velocity[1];
+  v.z = velocity[2];
+
+  a.x = velocity[3];
+  a.y = velocity[4];
+  a.z = velocity[5];
 }

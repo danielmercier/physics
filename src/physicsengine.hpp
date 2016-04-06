@@ -7,13 +7,23 @@
 #include "object.hpp"
 #include "contact.hpp"
 #include "constraint.hpp"
+#include "solver.hpp"
+#include "sequentialsolver.hpp"
 
 class PhysicsEngine{
   private:
     std::vector<Object*> objects;
+    Solver *solver;
+
+    bool ownsolver;
 
   public:
+    PhysicsEngine(Solver &sol);
+    PhysicsEngine();
+    ~PhysicsEngine();
+
     void add(Object *o);
+    void add(Constraint &c);
 
     void update(double t, double dt);
 

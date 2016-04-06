@@ -21,20 +21,15 @@ Object::~Object(){
   delete _collisionShape;
 }
 
-Object::State * Object::state(){
-  return &current;
-}
-
 Object::State Object::previousState(){
   return previous;
 }
-
 
 Object::State Object::interpolate(double alpha){
   return interpolate(previous, current, alpha);
 }
 
-std::list<glm::dvec3> Object::get_vertices(){
+std::list<glm::dvec3> Object::getVertices(){
   return vertices;
 }
 
@@ -133,6 +128,17 @@ void Object::integrateVelocities(double dt){
 
 void Object::setPosition(glm::dvec3 pos){
   current.position = pos;
+  current.recalculate();
+}
+
+void Object::setScaling(glm::dvec3 scaling){
+  current.scaling = scaling;
+  current.recalculate();
+}
+
+void Object::setOrientation(glm::quat orientation){
+  current.orientation = orientation;
+  current.recalculate();
 }
 
 void Object::setLinearVelocity(glm::dvec3 vel){
@@ -141,4 +147,28 @@ void Object::setLinearVelocity(glm::dvec3 vel){
 
 void Object::setAngularVelocity(glm::dvec3 vel){
   current.angularVelocity = vel;
+}
+
+glm::dvec3 Object::toWorld(const glm::dvec3 &point, double homogeneous){
+  return glm::dvec3(current.bodyToWorld * glm::dvec4(point, homogeneous));
+}
+
+glm::dvec3 Object::getPosition(){
+  return current.position;
+}
+
+glm::dvec3 Object::getLinearVelocity(){
+  return current.velocity;
+}
+
+glm::dvec3 Object::getAngularVelocity(){
+  return current.angularVelocity;
+}
+
+Object::State Object::getState(){
+  return current;
+}
+
+void Object::recalculate(){
+  current.recalculate();
 }

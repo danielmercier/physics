@@ -5,7 +5,6 @@
 
 Cube::Cube(double mass, glm::dvec3 scaling){
   _collisionShape = new CubeShape(this);
-  this->scaling = scaling;
 
   vertices.push_back(scaling * glm::dvec3(-1., 1., 1.));
   vertices.push_back(scaling * glm::dvec3(-1., 1., -1.));
@@ -24,9 +23,12 @@ Cube::Cube(double mass, glm::dvec3 scaling){
           { 0                            , 0                            , CARRE(scaling.x) + CARRE(scaling.y) }
         };
 
-  current.inertiaTensor = (mass / 12.) * current.inertiaTensor;
+  current.scaling = scaling;
   current.mass = mass;
-
-  current.inverseInertiaTensor = glm::inverse(current.inertiaTensor);
   current.inverseMass = 1. / mass;
+
+  current.inertiaTensor = (mass / 12.) * current.inertiaTensor;
+  current.inverseInertiaTensor = glm::inverse(current.inertiaTensor);
+
+  current.recalculate();
 }

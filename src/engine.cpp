@@ -4,13 +4,14 @@ double Engine::gettime(){
   return glutGet(GLUT_ELAPSED_TIME) / 1000;
 }
 
-Engine::Engine(){
+Engine::Engine(PhysicsEngine &physics){
   currentTime = gettime();
   accumulator = 0.0;
+  this->physics = &physics;
 }
 
 void Engine::add(Object &op, ObjectRenderer &ore){
-  physics.add(&op);
+  physics->add(&op);
   renderer.add(&ore);
 }
 
@@ -33,7 +34,7 @@ void Engine::update(){
   //}
   //
   if(!this->pause){
-    physics.update( t, dt );
+    physics->update( t, dt );
   }
   t += dt;
 

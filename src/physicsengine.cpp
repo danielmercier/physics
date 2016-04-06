@@ -3,6 +3,22 @@
 #include "distanceconstraint.hpp"
 #include "converter.hpp"
 
+PhysicsEngine::PhysicsEngine(Solver &sol){
+  ownsolver = false;
+  solver = &sol;
+}
+
+PhysicsEngine::PhysicsEngine(){
+  ownsolver = true;
+  solver = new SequentialSolver(100);
+}
+
+PhysicsEngine::~PhysicsEngine(){
+  if(ownsolver){
+    delete solver;
+  }
+}
+
 bool equal(double a, double b){
   const double tol = 1e-10;
   return (abs(a - b) <= tol);
@@ -13,6 +29,10 @@ bool equal(glm::dvec3 a, glm::dvec3 b){
   return equal(res.x, 0.) &&
          equal(res.y, 0.) &&
          equal(res.z, 0.);
+}
+
+void PhysicsEngine::add(Constraint &c){
+  solver->add(c);
 }
 
 void PhysicsEngine::add(Object *o){
@@ -27,41 +47,11 @@ void PhysicsEngine::update(double t, double dt){
     o->integrateForces(dt);
   }
 
-  for(int i = 0 ; i < 10 ; i++){
-    Object::State *st = objects[0]->state();
-    Object::State s;
-    s.velocity = glm::dvec3(0.);
-    s.position = { 0., 30., 0. };
-    s.inverseMass = 0.;
-    s.inverseInertiaTensor = glm::dmat3(0.);
-
-    DistanceConstraint c(*objects[0]->state(), s);
-    double j = c.solve();
-    arma::vec v = c.apply(j);
-    glm::dvec3 v1;
-    glm::dvec3 a1;
-    glm::dvec3 v2;
-    glm::dvec3 a2;
-    Converter::get_velocity(v, v1, a1, v2, a2);
-    st->velocity = v1;
-    st->angularVelocity = a1;
-
-    DistanceConstraint c2(s, *objects[1]->state());
-    j = c2.solve();
-    v = c2.apply(j);
-
-    Converter::get_velocity(v, v1, a1, v2, a2);
-    //st->velocity = v1;
-    //st->angularVelocity = a1;
-
-    Object::State st2 = *objects[1]->state();
-    st->velocity = v2;
-    st->angularVelocity = a2;
-  }
+  solver->solve();
 
   for(auto o : objects){
     o->integrateVelocities(dt);
-    o->state()->recalculate();
+    o->recalculate();
   }
 }
 

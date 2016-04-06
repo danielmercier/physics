@@ -3,17 +3,27 @@
 #include <armadillo>
 
 class Constraint{
+  private:
+    arma::mat bias;
+
   protected:
     arma::mat jacobian;
     arma::mat invmass;
-    arma::vec velocity;
-    double bias;
+    arma::mat velocity;
+
+    //Met a jour et indique si la contrainte doit être appliquée
+    virtual bool update() = 0;
+
+
+    //retourne le vecteur des nouvelles vitesses
+    arma::mat getVelocities(arma::mat lambda);
+    arma::mat getVelocities(double);
 
   public:
-    Constraint(arma::mat jacobian, arma::vec invmass, arma::vec velocity, double bias = 0.);
     Constraint();
 
-    double solve();
+    arma::mat solve();
 
-    arma::vec apply(double lambda);
+    //applique lambda
+    virtual void apply(arma::mat lambda) = 0;
 };
