@@ -9,6 +9,7 @@ class DistanceConstraint : public Constraint{
     Object *object2;
     glm::dvec3 r1;
     glm::dvec3 r2;
+    glm::dvec3 anchor_dist;
 
   protected:
     virtual bool update();

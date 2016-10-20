@@ -10,7 +10,7 @@ PhysicsEngine::PhysicsEngine(Solver &sol){
 
 PhysicsEngine::PhysicsEngine(){
   ownsolver = true;
-  solver = new SequentialSolver(100);
+  solver = new SequentialSolver();
 }
 
 PhysicsEngine::~PhysicsEngine(){

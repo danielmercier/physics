@@ -35,7 +35,8 @@ void DistancePointConstraint::apply(arma::mat lambda){
   glm::dvec3 v;
   glm::dvec3 a;
 
-  arma::mat vec = getVelocities(lambda[0]);
+
+  arma::mat vec = getVelocities(lambda);
 
   Converter::get_velocity(vec, v, a);
 

@@ -9,7 +9,9 @@ void SequentialSolver::solve(){
   for(int i = 0 ; i < max_iter ; i++){
     for(auto c : constraints){
       lambda = c->solve();
-      c->apply(lambda);
+      if(c->mustBeApplied()){
+        c->apply(lambda);
+      }
     }
   }
 }

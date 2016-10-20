@@ -12,8 +12,8 @@
 #include "planrenderer.hpp"
 #include "cube.hpp"
 #include "cuberenderer.hpp"
+#include "global_const.hpp"
 
-#define DELTA_T 0.01
 
 class Engine{
   private:
