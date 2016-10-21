@@ -27,12 +27,12 @@ void Engine::update(){
   accumulator += frameTime;
 
   //while( accumulator >= dt ){
-  //  physics.update( t, dt );
+  //  physics->update( t, dt );
 
   //  t += dt;
   //  accumulator -= dt;
   //}
-  //
+  
   if(!this->pause){
     physics->update( t, dt );
   }

@@ -1,9 +1,8 @@
 #include "constraint.hpp"
 
-const double Constraint::bias_factor = 0.5;
 
 Constraint::Constraint(){
-  setBias(arma::mat{1.0});
+  bias_factor = 0.1;
   must_apply = false;
 }
 
@@ -41,9 +40,13 @@ bool Constraint::mustBeApplied(){
 }
 
 void Constraint::setBias(arma::mat bias){
-  this->bias = bias_factor * bias;
+  this->bias = bias_factor / DELTA_T * bias;
 }
 
 void Constraint::setBias(double bias){
-  this->bias = bias_factor * bias;
+  this->bias = bias_factor / DELTA_T * bias;
+}
+
+void Constraint::setBiasFactor(double bias_factor){
+  this->bias_factor = bias_factor;
 }

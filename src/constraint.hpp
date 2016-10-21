@@ -6,7 +6,7 @@
 
 class Constraint{
   private:
-    static const double bias_factor;
+    double bias_factor;
     arma::mat bias;
     bool must_apply;
 
@@ -34,4 +34,5 @@ class Constraint{
 
     void setBias(arma::mat bias);
     void setBias(double bias);
+    void setBiasFactor(double bias_factor);
 };

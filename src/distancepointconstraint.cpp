@@ -10,6 +10,7 @@ DistancePointConstraint::DistancePointConstraint(
   this->object = &o;
   this->point = point;
   this->r = r;
+  setBiasFactor(0.05);
 
   invmass = Converter::get_invmass(o.getState());
 }
@@ -20,6 +21,7 @@ bool DistancePointConstraint::update(){
 
   glm::dvec3 dist = point2 - point1;
   glm::dvec3 rcross = glm::cross(object->getPosition() - point1 , dist);
+  setBias(glm::length(dist));
 
   jacobian = arma::rowvec({ -dist.x, -dist.y, -dist.z,
                 rcross.x, rcross.y, rcross.z });
